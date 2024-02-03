@@ -8,7 +8,7 @@ export async function POST(NextRequest) {
   try {
     const reqBody = await NextRequest.json();
     const { user, text } = reqBody;
-    console.log(reqBody);
+    // console.log(reqBody);
     console.log(user,text);
 
     const newBlog = new Blog({

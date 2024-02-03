@@ -7,14 +7,17 @@ export default function Home() {
   const [user, setUser] = React.useState("");
   const [text, setText] = React.useState("");
   const [blog, setBlog] = React.useState(null);
+  const [loading, setLoading] = React.useState(false)
 
   const sendBlog = async () => {
     try {
+      setLoading(true)
       const response = await axios.post("/api/users/save-blog", { user, text });
       console.log(response);
       setText("");
       setUser("");
       alert("Sent Successfully!!");
+      setLoading(false)
     } catch (error) {
       console.error("Try Part of frontend Failed", +error.response.data);
       alert("Try Part of frontend Failed");
@@ -36,10 +39,11 @@ export default function Home() {
   }, []);
 
   return (
-    <body className=" flex flex-col dark:bg-black dark:text-white bg-white text-black">
-      <Navbar />
-      <main className="flex flex-col items-center justify-center h-screen overflow-hidden overflow-y-scroll">
+    <body className=" flex flex-col dark:bg-black dark:text-white bg-white text-black space-y-4 h-screen">
+      <Navbar className="w-screen z-10 fixed"/>
+      <main className="flex flex-col items-center justify-center max-h-full ">
         <div className="flex flex-col space-y-4 box-shadow-2xl shadow-2xl px-2 py-4 rounded-xl ">
+        <strong className="text-2xl font-serif">{loading? "Processing": "Add Your Blog"}</strong>
           <h1>
             <input
               placeholder="Your Name"
@@ -65,7 +69,7 @@ export default function Home() {
             POST
           </button>
         </div>
-        <div className="flex flex-col overflow-hidden overflow-y-scroll space-y-4 justify-evenly mt-8 ">
+        <div className="flex flex-col space-y-4 justify-evenly mt-8 ">
           {blog == null
             ? ""
             : blog.map((data, index) => (
