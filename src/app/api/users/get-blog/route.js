@@ -6,7 +6,7 @@ connect();
 
 export async function GET() {
   try {
-    const data = await Blog.find({}).exec();
+    const data = await Blog.find({}).limit(100);
     console.log(data);
     // console.log(data.name,data.blog);
 
