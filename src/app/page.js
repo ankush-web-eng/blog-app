@@ -30,7 +30,7 @@ export default function Home() {
       setBlog(response.data.data);
     } catch (error) {
       console.error("Try Part of frontend Failed", +error.response.data);
-      alert("Try Part of frontend Failed");
+      alert("All fields are Mandatory!!");
     }
   };
 
