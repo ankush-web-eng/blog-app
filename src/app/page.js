@@ -23,6 +23,7 @@ export default function Home() {
       alert("Try Part of frontend Failed");
     }
   };
+  
 
   const getData = async () => {
     try {
