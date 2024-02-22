@@ -70,13 +70,13 @@ export default function Home() {
             POST
           </button>
         </div>
-        <div className="flex flex-col space-y-4 justify-evenly mt-8 ">
+        <div className="flex flex-col md:flex-row md:flex-wrap space-y-4 justify-evenly mt-8 items-center">
           {blog == null
             ? ""
             : blog.map((data, index) => (
                 <div
                   key={index}
-                  className="box-shadow-2xl shadow-2xl rounded-xl py-2 px-3"
+                  className="box-shadow-2xl shadow-2xl rounded-xl py-2 px-3 w-36 h-32 overflow-hidden overflow-y-scroll no-scrollbar"
                 >
                   <strong>Name:{data.name}</strong>
                   <p><strong>Blog:</strong> {data.blog}</p>
