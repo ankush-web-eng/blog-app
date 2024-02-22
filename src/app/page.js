@@ -70,7 +70,7 @@ export default function Home() {
             POST
           </button>
         </div>
-        <div className="flex flex-col md:flex-row md:flex-wrap space-y-4 justify-evenly mt-8 items-center">
+        <div className="flex flex-wrap md:flex-row md:flex-wrap space-y-4 justify-evenly mt-8 items-center">
           {blog == null
             ? ""
             : blog.map((data, index) => (
