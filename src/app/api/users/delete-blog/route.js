@@ -8,19 +8,13 @@ connect();
 export async function POST(req) {
   try {
     const reqBody = await req.json();
-    const { user, text } = reqBody;
-    // console.log(reqBody);
-    // console.log(user,text);
+    const { id } = reqBody;
 
-    const newBlog = new Blog({
-      name: user,
-      blog: text,
-    });
-    // console.log(newBlog);
+    console.log(id);
 
-    const savedBlog = await newBlog.save();
-    if (savedBlog) {
-      console.log("Blog saved successfully");
+    const savedBlog = await Blog.findByIdAndDelete(id);
+    if (!savedBlog) {
+      return NextResponse.json({ message: "Unable to delete blog", success: false }, { status: 404})
     }
 
     revalidatePath('/');

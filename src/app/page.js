@@ -2,36 +2,67 @@
 import React from "react";
 import axios from "axios";
 import Navbar from "@/components/navbar";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import { MdDelete } from "react-icons/md";
 
 export default function Home() {
   const [user, setUser] = React.useState("");
   const [text, setText] = React.useState("");
   const [blog, setBlog] = React.useState(null);
   const [loading, setLoading] = React.useState(false)
+  const router = useRouter()
 
   const sendBlog = async () => {
     try {
       setLoading(true)
-      const response = await axios.post("/api/users/save-blog", { user, text });
+      const response = await axios.post("/api/users/save-blog", { user, text }, {
+        cache: "no-cache",
+        next: {revalidate:3}
+      });
       console.log(response);
       setText("");
       setUser("");
       alert("Sent Successfully!!");
       setLoading(false)
+      router.reload()
     } catch (error) {
-      console.error("Try Part of frontend Failed", +error.response.data);
-      alert("Try Part of frontend Failed");
+      console.error("Try Part of frontend Failed", error.response.data);
     }
   };
+
+
+  const deleteBlog = async (id) => {
+    try {
+      let pass = prompt("Enter Password to delete")
+      if (pass == 'iamironman'){
+        const response = await axios.post("/api/users/delete-blog", { id }, {
+          cache: "no-cache",
+          next: {revalidate:3}
+        });
+        console.log(response);
+        alert("Deleted Successfully!!");
+        router.reload()
+      }else{
+        alert("Wrong Password!!!")
+      }
+    } catch (error) {
+      console.log("Error", error);
+      alert("Unable to delete blog");
+    }
+  }
   
 
   const getData = async () => {
     try {
-      const response = await axios.get("/api/users/get-blog");
+      const response = await axios.get("/api/users/get-blog", {
+        cache: "no-cache",
+        next: {revalidate:3}
+      });
       setBlog(response.data.data);
     } catch (error) {
-      console.error("Try Part of frontend Failed", +error.response.data);
-      alert("All fields are Mandatory!!");
+      console.error("Try Part of frontend Failed", error);
     }
   };
 
@@ -44,7 +75,7 @@ export default function Home() {
       <Navbar className="w-screen z-10 fixed"/>
       <main className="flex flex-col items-center justify-center max-h-full ">
         <div className="flex flex-col space-y-4 box-shadow-2xl shadow-2xl px-2 py-4 rounded-xl ">
-        <strong className="text-2xl font-serif">{loading? "Processing": "Add Your Blog"}</strong>
+        <strong className="text-2xl font-serif">Add your Blog</strong>
           <h1>
             <input
               placeholder="Your Name"
@@ -67,7 +98,7 @@ export default function Home() {
             onClick={sendBlog}
             className="bg-black border border-gray-300 mb-4 my-2 px-2 py-2 rounded-xl text-white hover:bg-blue-300 touch-pinch-zoom active:bg-green-500 hover:text-black drop-shadow-2xl"
           >
-            POST
+            {loading? <span className="flex items-center space-x-2"><Loader2 className="animate-spin"/>Processing</span>: "Submit"}
           </button>
         </div>
         <div className="flex flex-wrap md:flex-row md:flex-wrap space-y-4 justify-evenly mt-8 items-center">
@@ -80,6 +111,7 @@ export default function Home() {
                 >
                   <strong>Name:{data.name}</strong>
                   <p><strong>Blog:</strong> {data.blog}</p>
+                  <span ><MdDelete className="cursor-pointer" onClick={() => deleteBlog(data._id)}/></span>
                 </div>
               ))}
         </div>
