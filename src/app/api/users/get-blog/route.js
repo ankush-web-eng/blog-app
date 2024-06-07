@@ -21,5 +21,3 @@ export async function GET(req) {
     return NextResponse.json({ Error: error.message }, { status: 400 });
   }
 }
-
-export const runtime = 'edge'
